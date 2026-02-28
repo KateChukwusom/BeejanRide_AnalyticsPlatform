@@ -120,7 +120,7 @@ sources:
             description: "Platform fee deducted from the payment."
             data_type: float
           - name: currency
-            description: "ISO currency code for the transaction."
+            description: "currency code for the transaction."
             data_type: varchar
           - name: payment_status
             description: "Status of the payment. E.g. completed, failed, refunded."
@@ -144,7 +144,7 @@ sources:
           - name: _airbyte_generation_id
             data_type: number
           - name: rider_id
-            description: "Primary key. Unique identifier for each rider."
+            description: "Primary key"
             data_type: number
           - name: country
             description: "Country the rider signed up from."
@@ -171,7 +171,7 @@ sources:
         - name: _airbyte_generation_id
           data_type: number
         - name: trip_id
-          description: "Primary key. Unique identifier for each trip."
+          description: "Primary key."
           data_type: number
         - name: rider_id
           description: "Foreign key to riders_raw."
@@ -186,10 +186,10 @@ sources:
           description: "Vehicle used for the trip."
           data_type: varchar
         - name: status
-          description: "Final status of the trip. E.g. completed, cancelled, no_show."
+          description: "Final status of the trip"
           data_type: varchar
         - name: payment_method
-          description: "Payment method used. E.g. card, cash, wallet."
+          description: "Payment method used"
           data_type: varchar
         - name: is_corporate
           description: "True if the trip was booked under a corporate account."

@@ -1,0 +1,189 @@
+version: 2
+
+models:
+  - name: stg_beejanride__cities
+    description: "One row per city where BeejanRide operates."
+    columns:
+      - name: city_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: city_name
+        tests:
+          - not_null
+      - name: country
+        tests:
+          - not_null
+      - name: launch_date
+        tests:
+          - not_null
+
+  - name: stg_beejanride__drivers
+    description: "Current state of each driver record."
+    columns:
+      - name: driver_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: city_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_beejanride__cities')
+                field: city_id
+      - name: driver_status
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['active', 'suspended', 'inactive']
+      - name: rating
+        description: "Null if driver has not completed any trips yet."
+      - name: onboarding_date
+        tests:
+          - not_null
+      - name: created_at
+        tests:
+          - not_null
+
+  - name: stg_beejanride__driver_status_events
+    description: "One row per driver status change event"
+    columns:
+      - name: event_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: driver_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_beejanride__drivers')
+                field: driver_id
+      - name: driver_status
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['active', 'suspended', 'inactive']
+      - name: event_timestamp
+        tests:
+          - not_null
+
+  - name: stg_beejanride__riders
+    description: "Current state of each rider record(One name per rider)"
+    columns:
+      - name: rider_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: country
+        tests:
+          - not_null
+      - name: signup_date
+        tests:
+          - not_null
+      - name: created_at
+        tests:
+          - not_null
+      - name: is_referred
+        description: "True if the rider signed up using a referral code."
+        tests:
+          - not_null
+
+  - name: stg_beejanride__payments
+    description: "One row per payment transaction."
+    columns:
+      - name: payment_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: trip_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_beejanride__trips')
+                field: trip_id
+      - name: payment_status
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['completed', 'failed', 'refunded', 'pending']
+      - name: amount
+        tests:
+          - not_null
+      - name: fee
+        tests:
+          - not_null
+      - name: net_amount
+        description: "Amount minus company money."
+        tests:
+          - not_null
+      - name: currency
+        tests:
+          - not_null
+      - name: created_at
+        tests:
+          - not_null
+
+  - name: stg_beejanride__trips
+    description: "One row per trip. Current state of each trip record."
+    columns:
+      - name: trip_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: rider_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_beejanride__riders')
+                field: rider_id
+      - name: driver_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_beejanride__drivers')
+                field: driver_id
+      - name: city_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_beejanride__cities')
+                field: city_id
+      - name: trip_status
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['completed', 'cancelled', 'no_show', 'in_progress']
+      - name: is_corporate
+        tests:
+          - not_null
+      - name: estimated_fare
+        tests:
+          - not_null
+      - name: actual_fare
+        tests:
+          - not_null
+      - name: surge_multiplier
+        tests:
+          - not_null
+      - name: requested_at
+        tests:
+          - not_null
+      - name: created_at
+        tests:
+          - not_null
