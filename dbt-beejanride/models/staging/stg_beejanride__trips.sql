@@ -1,3 +1,4 @@
+
 with source as (
         SELECT 
             trip_id,
@@ -18,7 +19,7 @@ with source as (
             updated_at
 
 
-        FROM {{ source ('beejanride', 'trips_raw')}}
+        FROM {{ source('beejanride', 'trips_raw') }}
 
 )
-SELECT * FROM source;
+SELECT * FROM source

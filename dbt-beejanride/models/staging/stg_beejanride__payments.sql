@@ -7,11 +7,11 @@ with source as (
             currency as amount_currency,
             payment_status,
             payment_provider,
-            created_at,
-            cast(created_at as date) as created_at --only date from timestamp
+            created_at as created_at_timestamp
+            --cast(created_at as date) as payments_created_at --only date from timestamp
 
-        FROM {{ source ('beejanride', 'payments_raw')}}
-
+        FROM {{ source('beejanride', 'payments_raw') }}
+ 
 )
 
-SELECT * FROM source;
+SELECT * FROM source

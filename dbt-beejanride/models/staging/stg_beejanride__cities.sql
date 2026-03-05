@@ -5,6 +5,6 @@ with source as (
     city_name,
     country as country_name,
     launch_date
-    from {{ source ('beejanride', 'cities_raw')}}
+    from {{ source('beejanride','cities_raw') }}
 ) 
-select * from source;
+select * from source

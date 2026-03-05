@@ -1,0 +1,107 @@
+version: 2
+
+models:
+  - name: fct_trips
+    description: "A table that has all measures and metrics regarding events that happened"
+
+    columns:
+      - name: trip_id
+        description: "Unique key identifier"
+        tests:
+          - unique
+          - not_null
+
+      - name: driver_id
+        description: "Unique key identifier"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_drivers')
+                field: driver_id
+
+      - name: rider_id
+        description: "Unique key identifier"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_riders')
+                field: rider_id
+
+      - name: city_id
+        description: "Unique key identifier"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cities')
+                field: city_id
+
+      - name: net_revenue
+        description: "Amount of money after deducting platform fee"
+        tests:
+          - not_null
+
+      - name: fraud_indicators
+        description: "A metric that indicates fraud, in context of metrics applied"
+        tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: duplicate_trip_payments
+        description: "A metric that indicates duplicate payments"
+        tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: failed_payments_on_completed_trip
+        description: "A metric that indicates payments that are not successfull upon completed trips"
+        tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+  - name: dim_drivers
+    description: "A table that has information about the descriptive features of each drivers(one drivers per row)"
+
+    columns:
+      - name: driver_id
+        description: "Unique Key for easy identification"
+        tests:
+          - unique
+          - not_null
+
+      - name: driver_status
+        description: "A value used to identify drivers avaialble for ride-hailing"
+        tests:
+          - accepted_values:
+              arguments:
+               values: ['active', 'inactive', 'suspended']
+
+  - name: dim_riders
+    description: "A table that has information about the descriptive features of each riders(one rider per row)"
+
+    columns:
+      - name: rider_id
+        description: "Unique key for easy identification"
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_cities
+    description: "A table that has information about the descriptive features of each city(one city per row)"
+
+    columns:
+      - name: city_id
+        description: "Unique key for easy identification"
+        tests:
+          - unique
+          - not_null
+
+      - name: city_name
+        description: "City name"
+        tests:
+          - not_null
