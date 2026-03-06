@@ -23,8 +23,21 @@ models:
     # Config indicated by + and applies to all files under models/example/
     staging:
       +schema: staging 
+      +materialized: view
     intermediate:
       +schema: intermediate
+      +materialized: view
     marts:
       +schema: mart
+      +materialized: table
+      finance:
+          +tags: ["finance"]
+          +schema: finance
+      operations:
+          +tags: ["operations"]
+          +schema: operations
+      fraud:
+          +tags: ["fraud"]
+          +schema: fraud
+
     

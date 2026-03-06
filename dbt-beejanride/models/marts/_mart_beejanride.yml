@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: fct_trips
+  - name: fact_trips
     description: "A table that has all measures and metrics regarding events that happened"
 
     columns:
