@@ -38,7 +38,7 @@ models:
         tests:
           - accepted_values:
               arguments:
-                values: [0, 1]
+                values: [TRUE, FALSE]
 
       - name: net_revenue
         description: "Actual income after deducting platform fee"
@@ -50,28 +50,28 @@ models:
         tests:
           - accepted_values:
               arguments:
-                values: [0, 1]
+                values: [TRUE, FALSE]
 
       - name: duplicate_trip_payments
         description: "A flag that detects duplicate trip payments"
         tests:
           - accepted_values:
               arguments:
-                values: [0, 1]
+                values: [TRUE, FALSE]
 
       - name: failed_payments_on_completed_trip
         description: "A flag that detects failed payments for completed trip"
         tests:
           - accepted_values:
               arguments:
-                values: [0, 1]
+                values: [TRUE, FALSE]
 
       - name: fraud_indicators
-        description: "A flag that indicates fraud indicators"
+        description: "A flag that detects fraud indicators"
         tests:
           - accepted_values:
               arguments:
-                values: [0, 1]
+                values: [TRUE, FALSE]
 
   - name: int__drivers_enriched
     description: "This model transforms the staging drivers layer by applying measures and metrics"

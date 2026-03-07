@@ -1,6 +1,6 @@
 -- This model calculates revenue between corporate accounts and regular personal riders
 
-{{ config(materialized='table', tags=['finance']) }}
+{{ config(materialized='table', tags=["finance"]) }}
 
 select
     date_trunc('month', pickup_at) as trip_month,

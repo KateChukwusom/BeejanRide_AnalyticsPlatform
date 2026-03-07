@@ -48,21 +48,21 @@ models:
         tests:
           - accepted_values:
               arguments:
-                values: [0, 1]
+                values: [TRUE, FALSE]
 
       - name: duplicate_trip_payments
         description: "A metric that indicates duplicate payments"
         tests:
           - accepted_values:
               arguments:
-                values: [0, 1]
+                values: [TRUE, FALSE]
 
       - name: failed_payments_on_completed_trip
         description: "A metric that indicates payments that are not successfull upon completed trips"
         tests:
           - accepted_values:
               arguments:
-                values: [0, 1]
+                values: [TRUE, FALSE]
 
   - name: dim_drivers
     description: "A table that has information about the descriptive features of each drivers(one drivers per row)"

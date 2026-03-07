@@ -1,6 +1,6 @@
 -- This presents the monthly view of how much revenue is retained compared to whole resource
 
-{{ config(materialized='table', tags=['finance']) }}
+{{ config(materialized='table', tags=["finance"]) }}
 
 select
     date_trunc('month', pickup_at) as trip_month,

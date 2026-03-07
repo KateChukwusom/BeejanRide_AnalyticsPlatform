@@ -9,8 +9,7 @@ select
     count(trip_id) as total_trips,
 
     -- Count of trips flagged as extreme surge (multiplier > 10)
-    sum(case when extreme_surge_multiplier
-             then 1 else 0 end) as extreme_surge_trips,
+   count_if(extreme_surge_multiplier) as extreme_surge_trips,
     -- Average fare across all trips — compare with extreme_surge_trips
     -- to see how much surge is inflating the average
     avg(actual_fare) as avg_fare,

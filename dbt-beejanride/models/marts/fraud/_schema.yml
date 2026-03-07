@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: mart_fraud_monitoring
+    description: "Trip-level view of all transactions that triggered at least one fraud signal." 
+    config:
+      meta:
+        data_owner: "fraud Team"
+      tags: ["Fraud"]
+    columns:
+      - name: trip_id
+        description: "Unique identifier for the flagged trip."
+        tests: 
+          - not_null
+          - unique
+      - name: driver_id
+        description: "Driver associated with the flagged trip."
+        tests: 
+          - not_null
+      - name: rider_id
+        description: "Rider associated with the flagged trip."
+        tests: 
+        - not_null
+      - name: pickup_at
+        description: "Timestamp when the trip began."
+      - name: city_id
+        description: "City where the flagged trip occurred."
+      - name: actual_fare
+        description: "Fare charged on the flagged trip."
+      - name: duplicate_trip_payments
+        description: "Number of duplicate payment attempts recorded on this trip. Any value above 0 is suspicious."
+      - name: fraud_indicators
+        description: "Boolean flag combining multiple fraud signals — extreme surge, duplicate payments, or suspiciously short trip duration."
+      - name: extreme_surge_multiplier
+        description: "Boolean flag indicating the surge multiplier exceeded 10x on this trip."
+      - name: failed_payments_on_completed_trip
+        description: "Indicates a payment failure occurred on a trip marked as completed."

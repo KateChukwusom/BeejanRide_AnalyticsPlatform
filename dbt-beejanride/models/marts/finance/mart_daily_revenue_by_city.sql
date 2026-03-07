@@ -1,5 +1,5 @@
 
-{{ config(materialized='table', tags=['finance']) }}
+{{ config(materialized='table', tags=["finance"]) }}
 
 select
     -- Truncate the timestamp to adjust the date so we can group by day
