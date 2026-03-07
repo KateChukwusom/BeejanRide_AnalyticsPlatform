@@ -3,10 +3,10 @@
 with riders as (
         select
             rider_id,
-            rider_country,
+            country,
             signup_date,
             referral_code,
-            riders_created_timestamp
+            created_at
             
         from {{ ref('int__riders_enriched') }}
 ),
@@ -15,10 +15,10 @@ final as (
 
         select 
             rider_id,
-            rider_country,
+            country,
             signup_date,
             referral_code,
-            riders_created_timestamp
+            created_at
             
         from riders
         QUALIFY ROW_NUMBER() OVER (PARTITION BY rider_id ORDER BY signup_date DESC) = 1  

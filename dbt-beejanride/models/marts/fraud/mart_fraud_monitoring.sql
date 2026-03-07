@@ -14,7 +14,7 @@ select
 from {{ ref('fact_trips') }}
 where
     fraud_indicators = true
-    or duplicate_trip_payments > 0
+    or duplicate_trip_payments = true
     or extreme_surge_multiplier = true
 
     

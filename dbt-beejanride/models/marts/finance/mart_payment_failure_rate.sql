@@ -14,7 +14,7 @@ select
 
     -- Failure rate as a percentage, rounded to 2 decimal places 
     round(
-        sum(failed_payments_on_completed_trip:int) / nullif(count(trip_id), 0) * 100, 2) as failure_rate_pct
+        sum(failed_payments_on_completed_trip::int) / nullif(count(trip_id), 0) * 100, 2) as failure_rate_pct
 
 from {{ ref('fact_trips') }}
 where trip_status = 'completed'

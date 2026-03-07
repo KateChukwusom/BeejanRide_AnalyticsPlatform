@@ -28,8 +28,8 @@ payments as (
             select 
                 payment_id,
                 trip_id,
-                total_amount,
-                platform_fee,
+                amount,
+                fee,
                 payment_status
             from {{ ref('stg_beejanride__payments')}}
 
@@ -40,8 +40,8 @@ payment_quality as (
             select 
                 trip_id,
                 count(payment_id) as count_payment_id,
-                sum(total_amount) as total_payment_amount,
-                sum(platform_fee) as total_platform_fee,
+                sum(amount) as total_payment_amount,
+                sum(fee) as total_platform_fee,
                 max(case when payment_status = 'failed' then TRUE else FALSE end) as has_failed_payments,
 
             -- 1 if this trip has more than one payment record(duplicates)

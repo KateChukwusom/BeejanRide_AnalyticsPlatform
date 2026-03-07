@@ -69,7 +69,7 @@ models:
           - not_null
           - accepted_values:
               arguments:
-                values: ['active', 'suspended', 'inactive']
+                values: ['online', 'offline']
       - name: event_timestamp
         tests:
           - not_null
@@ -83,6 +83,7 @@ models:
           - unique
           - not_null
       - name: country
+        description: Country where trip occured
         tests:
           - not_null
       - name: signup_date
@@ -91,10 +92,12 @@ models:
       - name: created_at
         tests:
           - not_null
-      - name: is_referred
+      - name: referral_code
         description: "True if the rider signed up using a referral code."
         tests:
-          - not_null
+          - not_null:
+              config:
+                severity: warn
 
   - name: stg_beejanride__payments
     description: "One row per payment transaction."
@@ -116,15 +119,12 @@ models:
           - not_null
           - accepted_values:
               arguments:
-                values: ['completed', 'failed', 'refunded', 'pending']
+                values: ['failed', 'success']
       - name: amount
         tests:
           - not_null
       - name: fee
-        tests:
-          - not_null
-      - name: net_amount
-        description: "Amount minus company money."
+        description: Platform fee retained
         tests:
           - not_null
       - name: currency

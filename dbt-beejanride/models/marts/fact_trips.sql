@@ -3,21 +3,19 @@
 
 with drivers as (
 
-            select 
+            select distinct
                 driver_id,
                 trip_id,
                 driver_lifetime_trips
             from {{ ref('int__drivers_enriched') }}
-
 ),
 
 riders as (
         
-        select 
-            trip_id, 
-            rider_id,
-            rider_lifetime_value
-        from {{ ref('int__riders_enriched') }}
+        select distinct
+                rider_id,
+                rider_lifetime_value
+            from {{ ref('int__riders_enriched') }}
 ),
 
 trips as (
