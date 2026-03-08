@@ -5,9 +5,6 @@ End-to-end data transformation pipeline for BeejanRide, a ride-hailing platform.
 ## Project Overview
 Raw transactional data is ingested from a Postgres database into Snowflake's raw schema using Airbyte. 
 dbt then transforms this data through three layers. 
-The staging layer cleans and standardises each source table. 
-The intermediate layer applies business logic and enriches entities — computing metrics like net revenue, rider lifetime value, and fraud indicators. 
-These enriched models feed into fct__trips, the central incremental fact table in the marts layer. 
 Domain-specific aggregate marts are then built on top of fct__trips and organised into three schemas — finance, operations, and fraud — each powering a specific set of dashboards and analytical use cases.
 
 # Source Layer
