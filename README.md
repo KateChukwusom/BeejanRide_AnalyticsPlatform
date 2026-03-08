@@ -1,6 +1,6 @@
 ## BeejanRide dbt Analytics Platform
 
-End-to-end data transformation pipeline for BeejanRide — a ride-hailing platform. Built with dbt on Snowflake, this project transforms raw operational data into analytics-ready models for finance, operations, and fraud monitoring teams.
+End-to-end data transformation pipeline for BeejanRide, a ride-hailing platform. Built with dbt on Snowflake, this project transforms raw operational data into analytics-ready models for finance, operations, and fraud monitoring teams.
 
 ## Project Overview
 Raw transactional data is ingested from a Postgres database into Snowflake's raw schema using Airbyte. 
@@ -21,10 +21,15 @@ Defined using sources.yml in dbt
 
 Source tables include:
 trips_raw
+
 payments_raw
+
 drivers_raw
+
 riders_raw
+
 cities_raw
+
 driver_status_events_raw
 
 # Staging Layer
@@ -32,16 +37,24 @@ The Staging layer standardizes and prepares raw data for downstream transformati
 
 - Responsibilities of the staging layer:
 Standardize column naming conventions
+
 Handle simple derived fields
+
 Filter or clean invalid records
+
 Maintain a one-to-one relationship with source tables
 
 Staging models include:
 stg__trips
+
 stg__payments
+
 stg__drivers
+
 stg__riders
+
 stg__cities
+
 stg__driver_status_events
 
 This layer ensures that downstream models interact with clean, consistently structured data.
@@ -51,21 +64,30 @@ The Intermediate layer contains enriched models that apply business logic and mo
 
 Responsibilities:
 Join staging models
+
 Implement business logic
+
 Calculate derived metrics
+
 Compute window functions
 
 Intermediate models include:
 
 int__trips_enriched
+
 int__drivers_enriched
+
 int__riders_enriched
 
 Examples of calculations performed in this layer include:
 trip_duration_minutes
+
 driver_lifetime_trips
+
 rider_lifetime_value
+
 fraud_indicators
+
 duplicate_trip_payments
 
 The intermediate layer prepares data for the dimensional model while keeping the logic modular and reusable.
@@ -108,9 +130,9 @@ This star schema design supports efficient analytical queries and simplifies BI 
 
 5. Mart Layer
 
-The Mart layer provides aggregated datasets tailored to specific business domains such as finance, operations, and fraud monitoring.
+The Mart layer provides aggregated data tailored to specific business domains such as finance, operations, and fraud monitoring.
 
-All mart models are derived from the fact_trips table and represent pre-aggregated metrics at specific grains.
+All mart models are derived from the fact_trips table.
 
 Finance marts:
 
