@@ -89,7 +89,7 @@ duplicate_trip_payments
 
 The intermediate layer prepares data for the dimensional model while keeping the logic modular and reusable.
 
-4. Core Layer (Dimensional Model)
+# Core Layer (Dimensional Model)
 
 The Core layer implements the warehouse’s star schema, which serves as the central analytical data model.
 
@@ -125,7 +125,7 @@ Dimension tables store descriptive attributes about riders, drivers, and cities.
 
 This star schema design supports efficient analytical queries and simplifies BI reporting.
 
-5. Mart Layer
+# Mart Layer
 
 The Mart layer provides aggregated data tailored to specific business domains such as finance, operations, and fraud monitoring.
 
@@ -159,7 +159,7 @@ fraud_monitoring
 
 These marts enable business teams to analyze operational performance, revenue trends, driver activity, and potential fraudulent behavior.
 
-Summary
+# Summary
 
 The layered architecture ensures:
 
