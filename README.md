@@ -5,7 +5,7 @@ End-to-end data transformation pipeline for BeejanRide, a ride-hailing platform.
 ## Project Overview
 Raw transactional data is ingested from a Postgres database into Snowflake's raw schema using Airbyte. 
 dbt then transforms this data through three layers. 
-Domain-specific aggregate marts are then built on top of fct__trips and organised into three schemas — finance, operations, and fraud — each powering a specific set of dashboards and analytical use cases.
+Domain-specific aggregate marts are then built on top of fct__trips and organised into three schemas — finance, operations, and fraud.
 
 # Source Layer
 The Source layer represents the raw data ingested from operational systems into the warehouse. These tables are loaded directly into Snowflake without transformation and serve as the foundation for the entire analytics pipeline.
