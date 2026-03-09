@@ -24,17 +24,17 @@ The platform was built to answer these core business questions:
 | 10 | Where is fraud happening in our trip data? | `fraud_monitoring` |
 
 ## Architecture
-![Data_Architecture](BeejanRide_Data_Architecture.png)
+![Data Architecture](BeejanRide_Data_Architecture.png)
 
 - The Pipeline is split into these layers
 
 | Layer | Materialisation | Models | Job |
 |---|---|---|---|
-| ① Source | Raw Tables | 6 | Ingested from Postgres via Airbyte — untouched |
-| ② Staging | Views | 6 | Clean, rename, cast, deduplicate |
-| ③ Intermediate | Views + Incremental | 3 | Business logic, enrichment, window functions |
-| ④ Core | Tables | 4 | Star schema — the single source of truth |
-| ⑤ Marts | Tables | 10 | Domain-specific aggregations for the business |
+| 1. Source | Raw Tables | 6 | Ingested from Postgres via Airbyte — untouched |
+| 2. Staging | Views | 6 | Clean, rename, cast, deduplicate |
+| 3. Intermediate | Views + Incremental | 3 | Business logic, enrichment, window functions |
+| 4. Core | Tables | 4 | Star schema — the single source of truth |
+| 5. Marts | Tables | 10 | Domain-specific aggregations for the business |
 
 ## Project Structure
 ```
