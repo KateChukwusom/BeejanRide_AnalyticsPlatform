@@ -24,7 +24,7 @@ The platform was built to answer these core business questions:
 | 10 | Where is fraud happening in our trip data? | `fraud_monitoring` |
 
 ## Architecture
-![Data Architecture](BeejanRide_Data_Architecture.png)
+![Data Architecture](BeenjanRide_Data_Architecture.png)
 
 - The Pipeline is split into these layers
 
