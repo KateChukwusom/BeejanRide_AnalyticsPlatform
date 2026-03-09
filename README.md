@@ -113,7 +113,7 @@ Every staging model:
 - Filters out records with a null primary key
 
 | Model | Source | 
-|---|---|---|
+|---|---|
 | `stg__trips` | trips_raw | 
 | `stg__payments` | payments_raw | 
 | `stg__drivers` | drivers_raw | 
@@ -143,7 +143,7 @@ The core layer assembles everything into the star schema. `fact_trips` is increm
 **fact_trips key columns:**
 
 | Column | Type |
-|---|---|---|
+|---|---|
 | `trip_id` | varchar | 
 | `driver_id` | varchar |
 | `rider_id` | varchar | 
