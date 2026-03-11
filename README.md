@@ -79,7 +79,7 @@ dbt-beejanride/
 |   └── generate_schema_name.sql
 ├── dbt_project.yml
 ```
-## 🛠️ Technology Stack
+## Technology Stack
 
 | Tool | Purpose |
 |---|---|
