@@ -133,8 +133,9 @@ The intermediate layer- This is where raw cleaned data becomes business-meaningf
 | `int__drivers_enriched` | View | `driver_lifetime_trips` — total trips a driver has ever done |
 | `int__riders_enriched` | View | `rider_lifetime_value` — total fare spend across all trips |
 
-**The `calculate_net_revenue` macro** — net revenue logic is used in 5+ models. Rather than copy-pasting the formula, it lives in one macro:
----
+## The `calculate_net_revenue` macro: 
+ 
+ — Net revenue logic is used in 5+ models. Rather than copy-pasting the formula, it lives in one macro.
 
 ### Star schema
 
