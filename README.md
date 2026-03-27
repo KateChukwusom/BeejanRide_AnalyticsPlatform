@@ -221,7 +221,6 @@ Every model in this project is documented in its _schema.yml:
 - Model description — what it is, what grain it's at, who uses it
 - Column descriptions — plain English, not just the column name restated
 - Business metric definitions — e.g. net_revenue means fare collected minus platform fee, not gross fare
-- Owner metadata — meta: {owner: data-engineering@beejanride.com}
 - Tags — finance, operations, fraud for filtering in the docs site
 
 ## Sample Analytical Queries
