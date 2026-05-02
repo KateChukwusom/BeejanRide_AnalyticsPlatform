@@ -33,7 +33,7 @@ The platform was built to answer these core business questions:
 | 10 | Where is fraud happening in our trip data? | `fraud_monitoring` |
 
 ## Architecture
-![Data Architecture](BeenjanRide_Data_Architecture.png)
+![Data Architecture](images/Beenjanride_Arch.png)
 
 - The Pipeline is split into these layers
 
@@ -101,12 +101,12 @@ dbt-beejanride/
 ## Data Model — ERD
 BeejanRide's warehouse is built around a single central fact — a trip. Every business question traces back to fact_trips. After transformation, the data is reshaped into a clean star schema. fact_trips sits at the centre, with three dimension tables hanging off it.
 
-![Data Model](BeejanRide_Data_Model.png)
+![Data Model](images/BeejanRide_Data_Model.png)
 
 ## Data Lineage
 From those 6 raw tables, dbt builds 23 models across 5 layers. Each mart is built for a specific business domain — no model does two jobs. The lineage flows top-down: raw → staging → intermediate → core → marts.
 
-![Data Lineage](BeejanRide_Data_Lineage_Screenshot.png)
+![Data Lineage](images/BeejanRide_Data_Lineage_Screenshot.png)
 
 ## Pipeline Layers
 
