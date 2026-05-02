@@ -6,6 +6,15 @@ End-to-end analytics pipeline for BeejanRide, a UK ride-hailing startup operatin
 - dbt then transforms this data through three layers. 
 - Domain-specific aggregate marts are then built and organised into three schemas — finance, operations, and fraud.
 
+| Tool | Role |
+|---|---|
+| **Airbyte Cloud** | Ingests raw data from source systems into BigQuery |
+| **dbt** | Transforms raw data through staging, intermediate, and mart layers |
+| **Apache Airflow** | Orchestrates the entire workflow on a daily schedule |
+| **Slack** | Receives real-time alerts on pipeline success and failure |
+
+---
+
 The goal wasn't just to move data. It was to build something reliable, scalable, and trustworthy — the kind of platform where an analyst can open a dashboard and not have to wonder whether the numbers are right.
 
 ## Business Objectives
@@ -421,5 +430,166 @@ where
     or duplicate_trip_payments = true
     or extreme_surge_multiplier = true
 ```
+
+# Orchestration with Airflow
+## DAG Explanation
+
+The DAG separates concerns cleanly into four stages — ingestion, transformation, testing, and alerting. Each stage only runs if the previous one succeeded.
+
+---
+
+### `trigger_airbyte_sync`
+
+Authenticates with the Airbyte Cloud API using `client_id` and `client_secret` stored as Airflow Variables. Exchanges the credentials for a short-lived Bearer token, then triggers a sync job for the configured connection. The job ID returned by the API is stored via XCom for the next task.
+
+---
+
+### `wait_for_airbyte_sync`
+
+Polls the Airbyte API every 30 seconds using the job ID from XCom. Continues polling until the sync status is `succeeded`, `failed`, `cancelled`, or `incomplete`. On success it stores the sync status via XCom. On failure it raises an exception which triggers retries and a Slack alert.
+
+---
+
+### `check_sync_status` — BranchPythonOperator
+
+Reads the sync status from XCom and decides which branch to follow:
+
+- If `succeeded` → proceeds to the `staging` task group
+- If `failed` → proceeds to `sync_failed`
+
+Uses `TriggerRule.ALL_DONE` so it always runs regardless of whether the upstream task succeeded or failed. This protects dbt from running on incomplete or stale data.
+
+---
+
+### Task Group: `staging`
+
+| Task | Command |
+|---|---|
+| `run_staging` | `dbt run --select models/staging --full-refresh` |
+| `test_staging` | `dbt test --select models/staging` |
+
+Staging models clean and standardise raw data from BigQuery. Tests must pass before intermediate models run.
+
+---
+
+### Task Group: `intermediate`
+
+| Task | Command |
+|---|---|
+| `run_intermediate` | `dbt run --select models/intermediate --full-refresh` |
+| `test_intermediate` | `dbt test --select models/intermediate` |
+
+Intermediate models join and enrich staging data, applying business logic before the final mart layer.
+
+---
+
+### Task Group: `marts`
+
+| Task | Command |
+|---|---|
+| `run_marts` | `dbt run --select models/marts --full-refresh` |
+| `test_marts` | `dbt test --select models/marts` |
+
+Mart models are the final, business-ready tables consumed by dashboards and analysts.
+
+---
+
+### `sync_failed`
+
+An empty placeholder task reached when the Airbyte sync fails. Allows the pipeline to end gracefully without leaving tasks in an undefined state. Uses `TriggerRule.ONE_FAILED`.
+
+---
+
+### `pipeline_end`
+
+The final task in the pipeline. Uses `TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS` so it runs after either the marts layer or the `sync_failed` branch completes. Fires a Slack success notification via `on_success_callback` when the full pipeline completes successfully.
+
+---
+
+### Task Dependencies
+
+```python
+trigger_sync >> wait_sync >> branch
+branch >> tg_staging >> tg_intermediate >> tg_marts >> pipeline_end
+branch >> sync_failed >> pipeline_end
+```
+
+---
+
+### Default Args
+
+| Arg | Value | Purpose |
+|---|---|---|
+| `owner` | `BeejanRide` | identifies the team responsible |
+| `retries` | `2` | retries each task twice on failure |
+| `retry_delay` | `2 minutes` | waits 2 minutes between retries |
+| `max_retry_delay` | `10 minutes` | caps the maximum wait between retries |
+| `on_failure_callback` | `slack_failure_callback` | sends a Slack alert on every task failure |
+
+---
+
+## Idempotency
+
+Idempotency means the pipeline produces the same result whether it runs once or multiple times. This is critical for safe backfills and reruns.
+
+### dbt `--full-refresh`
+
+Every dbt run task uses the `--full-refresh` flag:
+
+```bash
+dbt run --select models/staging --full-refresh
+```
+
+This drops and recreates the target table on every run instead of appending to it. Running the same DAG run twice will produce exactly the same tables in BigQuery — no duplicates, no inconsistencies.
+
+### Airbyte Sync
+
+Airbyte connections are configured with a sync mode which is `Full refresh | Overwrite` that handles deduplication at the destination. Re-triggering the same sync does not produce duplicate rows in BigQuery.
+
+---
+
+## Backfill
+
+Backfilling allows you to run the pipeline for historical dates that were missed or need to be reprocessed.
+
+The DAG is configured for backfilling:
+
+```python
+start_date=datetime(2026, 1, 1),
+catchup=True,
+```
+
+`catchup=True` tells Airflow to automatically run all missed DAG runs between `start_date` and today when the DAG is first enabled.
+
+### Manual backfill from the Airflow UI
+
+Go to **DAGs → Beejanride_pipeline → Graph View → trigger with date range**
+
+> Because the pipeline uses `--full-refresh` on all dbt models, backfills are safe to run multiple times without producing duplicate or inconsistent data.
+
+---
+
+## Monitoring and Alerting
+
+### Slack Alerts
+
+All alerting is handled through Slack via the `slack_webhook` connection configured in Airflow.
+
+**On task failure** — `slack_failure_callback` fires automatically for every task via `on_failure_callback` in `default_args`:
+
+**On pipeline success** — `slack_success_callback` fires via `on_success_callback` on the `pipeline_end` task:
+
+```
+BeejanRide Pipeline Succeeded
+Airbyte sync and all dbt models completed successfully.
+```
+---
+
+### Retries
+
+Every task retries up to 2 times with a 2-minute delay between attempts and a maximum delay cap of 10 minutes. A Slack alert fires on every failed attempt so the team is notified immediately.
+
+---
+
 
 
