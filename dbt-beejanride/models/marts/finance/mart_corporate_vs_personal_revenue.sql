@@ -3,7 +3,7 @@
 {{ config(materialized='table', tags=["finance"]) }}
 
 select
-    date_trunc('month', pickup_at) as trip_month,
+    date_trunc(pickup_at, month) as trip_month,
 
     -- This flag indicates which one is corporate and personal
     case

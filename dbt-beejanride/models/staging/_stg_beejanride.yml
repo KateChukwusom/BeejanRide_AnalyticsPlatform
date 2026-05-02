@@ -31,15 +31,13 @@ models:
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('stg_beejanride__cities')
-                field: city_id
+              to: ref('stg_beejanride__cities')
+              field: city_id
       - name: driver_status
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['active', 'suspended', 'inactive']
+              values: ['active', 'suspended', 'inactive']
       - name: rating
         description: "Null if driver has not completed any trips yet."
       - name: onboarding_date
@@ -61,15 +59,13 @@ models:
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('stg_beejanride__drivers')
-                field: driver_id
+              to: ref('stg_beejanride__drivers')
+              field: driver_id
       - name: driver_status
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['online', 'offline']
+              values: ['online', 'offline']
       - name: event_timestamp
         tests:
           - not_null
@@ -111,15 +107,13 @@ models:
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('stg_beejanride__trips')
-                field: trip_id
+              to: ref('stg_beejanride__trips')
+              field: trip_id
       - name: payment_status
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['failed', 'success']
+              values: ['failed', 'success']
       - name: amount
         tests:
           - not_null
@@ -146,29 +140,25 @@ models:
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('stg_beejanride__riders')
-                field: rider_id
+              to: ref('stg_beejanride__riders')
+              field: rider_id
       - name: driver_id
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('stg_beejanride__drivers')
-                field: driver_id
+              to: ref('stg_beejanride__drivers')
+              field: driver_id
       - name: city_id
         tests:
           - not_null
           - relationships:
-              arguments:
-                to: ref('stg_beejanride__cities')
-                field: city_id
+              to: ref('stg_beejanride__cities')
+              field: city_id
       - name: trip_status
         tests:
           - not_null
           - accepted_values:
-              arguments:
-                values: ['completed', 'cancelled', 'no_show', 'in_progress']
+              values: ['completed', 'cancelled', 'no_show', 'in_progress']
       - name: is_corporate
         tests:
           - not_null

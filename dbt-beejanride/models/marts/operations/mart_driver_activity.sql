@@ -6,7 +6,7 @@ select
     driver_id,
 
     -- One row per driver per day
-    date_trunc('day', pickup_at) as activity_date,
+    date_trunc(pickup_at, day) as activity_date,
     -- How many trips they completed on this day
     count(trip_id) as trips_on_day,
     -- Total minutes they spent actively driving (pickup to dropoff)

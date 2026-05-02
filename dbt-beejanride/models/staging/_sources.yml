@@ -2,9 +2,9 @@ version: 2
 
 sources:
   - name: beejanride
-    description: "BeejanRide database ingested via Airbyte from PostgreSQL into Snowflake."
-    database: beejanride
-    schema: raw
+    description: "BeejanRide database ingested via Airbyte from PostgreSQL into BigQuery."
+    database: beejanride-analyticsplatform
+    schema: beejanride_dataset
 
     config:
       loaded_at_field: _airbyte_extracted_at
@@ -17,204 +17,136 @@ sources:
         description: "All cities where BeejanRide operates."
         columns:
           - name: _airbyte_raw_id
-            data_type: varchar
           - name: _airbyte_extracted_at
-            data_type: timestamp_tz
           - name: _airbyte_meta
-            data_type: variant
           - name: _airbyte_generation_id
           - name: city_id
             description: "Primary key. Unique identifier for each city."
-            data_type: number
           - name: country
             description: "Country the city belongs to."
-            data_type: varchar
           - name: city_name
             description: "Name of the city."
-            data_type: varchar
           - name: launch_date
             description: "Date BeejanRide launched operations in this city."
-            data_type: date
 
       - name: driver_status_events_raw
         description: "Event log capturing every driver status change over time. One row per status change event."
         columns:
           - name: _airbyte_raw_id
-            data_type: varchar
           - name: _airbyte_extracted_at
-            data_type: timestamp_tz
           - name: _airbyte_meta
-            data_type: variant
           - name: _airbyte_generation_id
-            data_type: number
           - name: event_id
             description: "Primary key."
-            data_type: number
           - name: driver_id
             description: "Foreign key to drivers_raw."
-            data_type: number
           - name: status
             description: "The driver status at the time of the event. Values: active, suspended, inactive."
-            data_type: varchar
           - name: event_timestamp
             description: "Timestamp when the status change occurred."
-            data_type: timestamp_ntz
 
       - name: drivers_raw
         description: "All registered drivers on the BeejanRide platform. One row per driver."
         columns:
           - name: _airbyte_raw_id
-            data_type: varchar
           - name: _airbyte_extracted_at
-            data_type: timestamp_tz
           - name: _airbyte_meta
-            data_type: variant
           - name: _airbyte_generation_id
-            data_type: number
           - name: driver_id
             description: "Primary key. Unique identifier for each driver."
-            data_type: number
           - name: city_id
             description: "Foreign key to cities_raw. City the driver operates in."
-            data_type: number
           - name: vehicle_id
             description: "Foreign key to vehicles. Current vehicle assigned to the driver."
-            data_type: varchar
           - name: driver_status
             description: "Current status of the driver. Values: active, suspended, inactive."
-            data_type: varchar
           - name: rating
             description: "Average rating of the driver. Null if no trips completed yet."
-            data_type: float
           - name: onboarding_date
             description: "Date the driver completed onboarding and was approved."
-            data_type: date
           - name: created_at
             description: "Timestamp when the driver record was created."
-            data_type: timestamp_ntz
           - name: updated_at
             description: "Timestamp when the driver record was last updated."
-            data_type: timestamp_ntz
 
       - name: payments_raw
         description: "All payment transactions linked to trips. One row per payment."
         columns:
           - name: _airbyte_raw_id
-            data_type: varchar
           - name: _airbyte_extracted_at
-            data_type: timestamp_tz
           - name: _airbyte_meta
-            data_type: variant
           - name: _airbyte_generation_id
-            data_type: number
           - name: payment_id
             description: "Primary key. Unique identifier for each payment."
-            data_type: number
           - name: trip_id
             description: "Foreign key to trips_raw."
-            data_type: number
           - name: amount
             description: "Total amount charged to the rider."
-            data_type: float
           - name: fee
             description: "Platform fee deducted from the payment."
-            data_type: float
           - name: currency
-            description: "currency code for the transaction."
-            data_type: varchar
+            description: "Currency code for the transaction."
           - name: payment_status
             description: "Status of the payment. E.g. completed, failed, refunded."
-            data_type: varchar
           - name: payment_provider
             description: "Payment provider used. E.g. Stripe, Flutterwave."
-            data_type: varchar
           - name: created_at
             description: "Timestamp when the payment record was created."
-            data_type: timestamp_ntz
 
       - name: riders_raw
         description: "All registered riders on the BeejanRide platform. One row per rider."
         columns:
           - name: _airbyte_raw_id
-            data_type: varchar
           - name: _airbyte_extracted_at
-            data_type: timestamp_tz
           - name: _airbyte_meta
-            data_type: variant
           - name: _airbyte_generation_id
-            data_type: number
           - name: rider_id
             description: "Primary key"
-            data_type: number
           - name: country
             description: "Country the rider signed up from."
-            data_type: varchar
           - name: signup_date
             description: "Date the rider completed registration."
-            data_type: date
           - name: referral_code
             description: "Referral code used during signup. Null if no referral was used."
-            data_type: varchar
           - name: created_at
             description: "Timestamp when the rider record was created."
-            data_type: timestamp_ntz
 
       - name: trips_raw
         description: "All trip records on the BeejanRide platform. One row per trip."
         columns:
-        - name: _airbyte_raw_id
-          data_type: varchar
-        - name: _airbyte_extracted_at
-          data_type: timestamp_tz
-        - name: _airbyte_meta
-          data_type: variant
-        - name: _airbyte_generation_id
-          data_type: number
-        - name: trip_id
-          description: "Primary key."
-          data_type: number
-        - name: rider_id
-          description: "Foreign key to riders_raw."
-          data_type: number
-        - name: driver_id
-          description: "Foreign key to drivers_raw."
-          data_type: number
-        - name: city_id
-          description: "Foreign key to cities_raw. City where the trip occurred."
-          data_type: number
-        - name: vehicle_id
-          description: "Vehicle used for the trip."
-          data_type: varchar
-        - name: status
-          description: "Final status of the trip"
-          data_type: varchar
-        - name: payment_method
-          description: "Payment method used"
-          data_type: varchar
-        - name: is_corporate
-          description: "True if the trip was booked under a corporate account."
-          data_type: boolean
-        - name: estimated_fare
-          description: "Fare estimated at the time of booking."
-          data_type: float
-        - name: actual_fare
-          description: "Actual fare charged at trip completion."
-          data_type: float
-        - name: surge_multiplier
-          description: "Surge pricing multiplier applied at time of booking. 1.0 means no surge."
-          data_type: float
-        - name: requested_at
-          description: "Timestamp when the rider requested the trip."
-          data_type: timestamp_ntz
-        - name: pickup_at
-          description: "Timestamp when the driver picked up the rider."
-          data_type: timestamp_ntz
-        - name: dropoff_at
-          description: "Timestamp when the rider was dropped off."
-          data_type: timestamp_ntz
-        - name: created_at
-          description: "Timestamp when the trip record was created."
-          data_type: timestamp_ntz
-        - name: updated_at
-          description: "Timestamp when the trip record was last updated."
-          data_type: timestamp_ntz
+          - name: _airbyte_raw_id
+          - name: _airbyte_extracted_at
+          - name: _airbyte_meta
+          - name: _airbyte_generation_id
+          - name: trip_id
+            description: "Primary key."
+          - name: rider_id
+            description: "Foreign key to riders_raw."
+          - name: driver_id
+            description: "Foreign key to drivers_raw."
+          - name: city_id
+            description: "Foreign key to cities_raw. City where the trip occurred."
+          - name: vehicle_id
+            description: "Vehicle used for the trip."
+          - name: status
+            description: "Final status of the trip."
+          - name: payment_method
+            description: "Payment method used."
+          - name: is_corporate
+            description: "True if the trip was booked under a corporate account."
+          - name: estimated_fare
+            description: "Fare estimated at the time of booking."
+          - name: actual_fare
+            description: "Actual fare charged at trip completion."
+          - name: surge_multiplier
+            description: "Surge pricing multiplier applied at time of booking. 1.0 means no surge."
+          - name: requested_at
+            description: "Timestamp when the rider requested the trip."
+          - name: pickup_at
+            description: "Timestamp when the driver picked up the rider."
+          - name: dropoff_at
+            description: "Timestamp when the rider was dropped off."
+          - name: created_at
+            description: "Timestamp when the trip record was created."
+          - name: updated_at
+            description: "Timestamp when the trip record was last updated."

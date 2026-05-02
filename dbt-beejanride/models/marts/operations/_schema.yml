@@ -67,6 +67,7 @@ models:
         description: "Total amount charged to this rider across all completed trips."
       - name: ltv
         description: "Rider lifetime value — net revenue BeejanRide has earned from this rider."
+
   - name: mart_surge_impact
     description: "Daily analysis of surge pricing impact on revenue per city. To evaluate surge impact."
     config:
@@ -113,5 +114,4 @@ models:
         description: "Driver engagement analyzer. active = drove within 14 days, at_risk = 14-30 days inactive, churned = over 30 days inactive."
         tests:
           - accepted_values:
-              arguments:
-                values: ["active", "at_risk", "churned"]
+              values: ["active", "at_risk", "churned"]

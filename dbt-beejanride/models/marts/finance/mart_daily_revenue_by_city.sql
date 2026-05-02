@@ -1,9 +1,8 @@
-
 {{ config(materialized='table', tags=["finance"]) }}
 
 select
     -- Truncate the timestamp to adjust the date so we can group by day
-    date_trunc('day', pickup_at) as trip_date,
+    date_trunc(pickup_at, day) as trip_date,
     city_id,
     
     -- This counts the total number of completed trips on this day in this city
@@ -20,4 +19,4 @@ from {{ ref('fact_trips') }}
     -- This accounts for only completed trips
 where trip_status = 'completed'
 
-group by 1, 2  
+group by 1, 2

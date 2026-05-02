@@ -1,89 +1,87 @@
 version: 2
 
 models:
-  
-    - name: mart_daily_revenue_by_city
-      description: "Daily aggregated gross and net revenue broken down by city. Powers the daily revenue dashboard."
-      config:
-        meta:
-          data_owner: "Finance Team"
-        tags: ["finance"]
-      columns:
-      - name: trip_date
-        description: "Date of trips, truncated to day."
-        tests: 
-          - not_null
-      - name: city_id
-        description: "To Identify for the city where trips originated."
-        tests: 
-          - not_null
-      - name: total_trips
-        description: "Count of completed trips on this day in this city."
-      - name: gross_revenue
-        description: "Sum of actual fares charged to riders before any deductions."
-      - name: net_revenue
-        description: "Revenue retained by the company after driver payouts and processing fees."
+  - name: mart_daily_revenue_by_city
+    description: "Daily aggregated gross and net revenue broken down by city. Powers the daily revenue dashboard."
+    config:
+      meta:
+        data_owner: "Finance Team"
+      tags: ["finance"]
+    columns:
+    - name: trip_date
+      description: "Date of trips, truncated to day."
+      tests: 
+        - not_null
+    - name: city_id
+      description: "To Identify for the city where trips originated."
+      tests: 
+        - not_null
+    - name: total_trips
+      description: "Count of completed trips on this day in this city."
+    - name: gross_revenue
+      description: "Sum of actual fares charged to riders before any deductions."
+    - name: net_revenue
+      description: "Revenue retained by the company after driver payouts and processing fees."
 
-    - name: mart_gross_vs_net_revenue
-      description: "Monthly comparison of gross revenue versus net revenue, showing total deductions."
-      config:
-        meta:
-          data_owner: "Finance Team"
-        tags: ["finance"]
-      columns:
-      - name: trip_month
-        description: "Month of trips, truncated to the first day of the month."
-        tests: 
-          - not_null
-      - name: gross_revenue
-        description: "Total fares charged to riders across all completed trips."
-      - name: net_revenue
-        description: "Revenue retained by the company after all deductions."
-      - name: total_deductions
-        description: "Difference between gross and net revenue. Includes driver payouts and payment processing fees."
+  - name: mart_gross_vs_net_revenue
+    description: "Monthly comparison of gross revenue versus net revenue, showing total deductions."
+    config:
+      meta:
+        data_owner: "Finance Team"
+      tags: ["finance"]
+    columns:
+    - name: trip_month
+      description: "Month of trips, truncated to the first day of the month."
+      tests: 
+        - not_null
+    - name: gross_revenue
+      description: "Total fares charged to riders across all completed trips."
+    - name: net_revenue
+      description: "Revenue retained by the company after all deductions."
+    - name: total_deductions
+      description: "Difference between gross and net revenue. Includes driver payouts and payment processing fees."
 
-    - name: mart_corporate_vs_personal_revenue
-      description: "Monthly revenue split between corporate accounts and personal riders."
-      config:
-        meta:
-          data_owner: "Finance Team"
-          tags: ["finance"]
-      columns:
-      - name: trip_month
-        description: "Month of trips, truncated to the first day of the month."
-        tests: 
-          - not_null
-      - name: trip_type
-        description: "Whether the trip was a corporate or personal ride."
-        tests:
-          - accepted_values:
-              arguments:
-               values: ["corporate", "personal"]
-      - name: total_trips
-        description: "Number of completed trips in this month for this trip type."
-      - name: gross_revenue
-        description: "Total fares charged for this trip type in this month."
-      - name: net_revenue
-        description: "Net revenue retained for this trip type in this month."
-
-    - name: mart_payment_failure_rate
-      description: "Daily payment failure rate on completed trips per city. Used for the payment reliability report."
-      config:
-        meta:
-          data_owner: "Finance Team"
+  - name: mart_corporate_vs_personal_revenue
+    description: "Monthly revenue split between corporate accounts and personal riders."
+    config:
+      meta:
+        data_owner: "Finance Team"
         tags: ["finance"]
-      columns:
-      - name: trip_date
-        description: "Date of trips, truncated to day."
-        tests: 
-          - not_null
-      - name: city_id
-        description: "City where the trips occurred."
-        tests: 
-          - not_null
-      - name: completed_trips
-        description: "Total number of completed trips on this day in this city."
-      - name: failed_payments
-        description: "Number of completed trips where the payment subsequently failed."
-      - name: failure_rate_pct
-        description: "Percentage of completed trips with a failed payment. Formula: failed_payments / completed_trips * 100."
+    columns:
+    - name: trip_month
+      description: "Month of trips, truncated to the first day of the month."
+      tests: 
+        - not_null
+    - name: trip_type
+      description: "Whether the trip was a corporate or personal ride."
+      tests:
+        - accepted_values:
+            values: ["corporate", "personal"]
+    - name: total_trips
+      description: "Number of completed trips in this month for this trip type."
+    - name: gross_revenue
+      description: "Total fares charged for this trip type in this month."
+    - name: net_revenue
+      description: "Net revenue retained for this trip type in this month."
+
+  - name: mart_payment_failure_rate
+    description: "Daily payment failure rate on completed trips per city. Used for the payment reliability report."
+    config:
+      meta:
+        data_owner: "Finance Team"
+      tags: ["finance"]
+    columns:
+    - name: trip_date
+      description: "Date of trips, truncated to day."
+      tests: 
+        - not_null
+    - name: city_id
+      description: "City where the trips occurred."
+      tests: 
+        - not_null
+    - name: completed_trips
+      description: "Total number of completed trips on this day in this city."
+    - name: failed_payments
+      description: "Number of completed trips where the payment subsequently failed."
+    - name: failure_rate_pct
+      description: "Percentage of completed trips with a failed payment. Formula: failed_payments / completed_trips * 100."

@@ -1,15 +1,15 @@
--- This analyzes the revenue impact extreme surges (>10)
 {{ config(materialized='table', tags=['operations']) }}
 
+-- This analyzes the revenue impact extreme surges (>10)
 select
-    date_trunc('day', pickup_at) as trip_date,
+    date_trunc(pickup_at, day) as trip_date,
     city_id,
 
     -- All trips on this day in this city (completed only)
     count(trip_id) as total_trips,
 
     -- Count of trips flagged as extreme surge (multiplier > 10)
-   count_if(extreme_surge_multiplier) as extreme_surge_trips,
+    countif(extreme_surge_multiplier) as extreme_surge_trips,
     -- Average fare across all trips — compare with extreme_surge_trips
     -- to see how much surge is inflating the average
     avg(actual_fare) as avg_fare,

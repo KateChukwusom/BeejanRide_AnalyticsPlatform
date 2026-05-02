@@ -22,22 +22,22 @@ models:
   BEEJAN_RIDE:
     # Config indicated by + and applies to all files under models/example/
     staging:
-      +schema: staging 
+      #+schema: staging 
       +materialized: view
     intermediate:
-      +schema: intermediate
+      #+schema: intermediate
       +materialized: view
     marts:
-      +schema: mart
+      #+schema: mart
       +materialized: table
       finance:
           +tags: ["finance"]
-          +schema: finance
+          #+schema: finance
       operations:
           +tags: ["operations"]
-          +schema: operations
+          #+schema: operations
       fraud:
           +tags: ["fraud"]
-          +schema: fraud
+          #+schema: fraud
 
     

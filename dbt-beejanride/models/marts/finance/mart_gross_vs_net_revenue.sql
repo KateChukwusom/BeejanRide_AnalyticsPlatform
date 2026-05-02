@@ -3,7 +3,7 @@
 {{ config(materialized='table', tags=["finance"]) }}
 
 select
-    date_trunc('month', pickup_at) as trip_month,
+    date_trunc(pickup_at, month) as trip_month,
     sum(actual_fare) as gross_revenue,
 
     -- Revenue after driver payouts and processing fees
@@ -15,4 +15,3 @@ select
 from {{ ref('fact_trips') }}
 where trip_status = 'completed'
 group by 1
-

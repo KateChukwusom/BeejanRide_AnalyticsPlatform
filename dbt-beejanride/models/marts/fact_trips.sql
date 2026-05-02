@@ -1,5 +1,6 @@
-{{ config(materialized='incremental',
-            unique_key = 'trip_id')}}
+{{ config(
+    materialized='table'
+) }}
 
 with drivers as (
 

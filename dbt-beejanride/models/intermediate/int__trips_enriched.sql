@@ -1,6 +1,5 @@
 {{ config(
-    materialized='incremental',
-    unique_key='trip_id'
+    materialized='table'
 ) }}
 
 
@@ -71,7 +70,7 @@ trip_enriched as (
         -- Calculated Metrics
 
         -- total minutes between pickup and dropoff(Trip duration minutes)
-            datediff(minute, t.pickup_at, t.dropoff_at) as trip_duration_minutes,
+            date_diff(t.dropoff_at, t.pickup_at, minute) as trip_duration_minutes,
 
         -- 1 or true if rider is travelling under a corporate account, 0 or false otherwise
             case when t.is_corporate then TRUE else FALSE end as corporate_trip_flag,

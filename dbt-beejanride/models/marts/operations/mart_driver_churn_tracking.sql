@@ -17,15 +17,12 @@ select
     last_trip_at,
     driver_lifetime_trips,
         -- How many days have passed since their last trip
-    datediff('day', last_trip_at, current_timestamp) as days_since_last_trip,
+    date_diff(cast(current_timestamp() as datetime), last_trip_at, day) as days_since_last_trip,
     case
-        -- If it is more than 30 days then churned
-        when datediff('day', last_trip_at, current_timestamp) > 30
+        when date_diff(cast(current_timestamp() as datetime), last_trip_at, day) > 30
         then 'churned'
-        -- If it 14-30 days, then the driver is at risk of getting churned
-        when datediff('day', last_trip_at, current_timestamp) > 14
+        when date_diff(cast(current_timestamp() as datetime), last_trip_at, day) > 14
         then 'at_risk'
-        -- if it is within 14 days since their last trip, then active
         else 'active'
     end as churn_status
 from last_trips

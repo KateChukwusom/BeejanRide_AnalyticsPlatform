@@ -25,8 +25,7 @@ models:
         description: "This is the metric for evaluating a trip's instance"
         tests:
           - accepted_values:
-              arguments:
-                values: ['cancelled', 'completed']
+              values: ['cancelled', 'completed']
 
       - name: trip_duration_minutes
         description: "The amount of time in minutes a trip is completed"
@@ -36,9 +35,7 @@ models:
       - name: corporate_trip_flag
         description: "A flag that indicates the trip is sponsored by corporate"
         tests:
-          - accepted_values:
-              arguments:
-                values: [TRUE, FALSE]
+          - not_null
 
       - name: net_revenue
         description: "Actual income after deducting platform fee"
@@ -48,30 +45,22 @@ models:
       - name: extreme_surge_multiplier
         description: "A flag that detects anomally in surge multiplier"
         tests:
-          - accepted_values:
-              arguments:
-                values: [TRUE, FALSE]
+          - not_null
 
       - name: duplicate_trip_payments
         description: "A flag that detects duplicate trip payments"
         tests:
-          - accepted_values:
-              arguments:
-                values: [TRUE, FALSE]
+          - not_null
 
       - name: failed_payments_on_completed_trip
         description: "A flag that detects failed payments for completed trip"
         tests:
-          - accepted_values:
-              arguments:
-                values: [TRUE, FALSE]
+          - not_null
 
       - name: fraud_indicators
         description: "A flag that detects fraud indicators"
         tests:
-          - accepted_values:
-              arguments:
-                values: [TRUE, FALSE]
+          - not_null
 
   - name: int__drivers_enriched
     description: "This model transforms the staging drivers layer by applying measures and metrics"
